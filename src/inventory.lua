@@ -1,54 +1,9 @@
-udg_countItems = 0
-udg_itemClass = __jarray("")
-udg_itemAbilitys = __jarray("")
-udg_hero = nil
-gg_trg_Melee_Initialization = nil
-gg_unit_Hblm_0001 = nil
-function InitGlobals()
-    local i = 0
-    udg_countItems = 1
-    i = 0
-    while (true) do
-        if ((i > 1)) then break end
-        udg_itemClass[i] = ""
-        i = i + 1
-    end
-    i = 0
-    while (true) do
-        if ((i > 1)) then break end
-        udg_itemAbilitys[i] = ""
-        i = i + 1
-    end
-end
-
-function CreateUnitsForPlayer0()
-    local p = Player(0)
-    local u
-    local unitID
-    local t
-    local life
-    gg_unit_Hblm_0001 = BlzCreateUnitWithSkin(p, FourCC("Hblm"), -192.5, -311.4, 134.543, FourCC("Hblm"))
-end
-
-function CreatePlayerBuildings()
-end
-
-function CreatePlayerUnits()
-    CreateUnitsForPlayer0()
-end
-
-function CreateAllUnits()
-    CreatePlayerBuildings()
-    CreatePlayerUnits()
-end
-
---CUSTOM_CODE
 function Inventory()
     local GAMEUI = BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0)
 
     function MySplit(inputstr, sep)
         if sep == nil then
-            sep = "%s"
+            sep = "%%s"
         end
         local t={}
         for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
@@ -1138,63 +1093,3 @@ function Inventory()
     BlzFrameClearAllPoints(BlzGetFrameByName("InventoryText", 0))
 
 end
---CUSTOM_CODE
-function Trig_Melee_Initialization_Actions()
-    udg_itemAbilitys[0] = "AItc"
-    udg_itemClass[0] = "MainHand"
-    udg_hero = gg_unit_Hblm_0001
-        Inventory()
-        CreateInventory(udg_hero, Player(0))
-end
-
-function InitTrig_Melee_Initialization()
-    gg_trg_Melee_Initialization = CreateTrigger()
-    TriggerAddAction(gg_trg_Melee_Initialization, Trig_Melee_Initialization_Actions)
-end
-
-function InitCustomTriggers()
-    InitTrig_Melee_Initialization()
-end
-
-function RunInitializationTriggers()
-    ConditionalTriggerExecute(gg_trg_Melee_Initialization)
-end
-
-function InitCustomPlayerSlots()
-    SetPlayerStartLocation(Player(0), 0)
-    SetPlayerColor(Player(0), ConvertPlayerColor(0))
-    SetPlayerRacePreference(Player(0), RACE_PREF_HUMAN)
-    SetPlayerRaceSelectable(Player(0), true)
-    SetPlayerController(Player(0), MAP_CONTROL_USER)
-end
-
-function InitCustomTeams()
-    SetPlayerTeam(Player(0), 0)
-end
-
-function main()
-    SetCameraBounds(-3328.0 + GetCameraMargin(CAMERA_MARGIN_LEFT), -3584.0 + GetCameraMargin(CAMERA_MARGIN_BOTTOM), 3328.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), 3072.0 - GetCameraMargin(CAMERA_MARGIN_TOP), -3328.0 + GetCameraMargin(CAMERA_MARGIN_LEFT), 3072.0 - GetCameraMargin(CAMERA_MARGIN_TOP), 3328.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), -3584.0 + GetCameraMargin(CAMERA_MARGIN_BOTTOM))
-    SetDayNightModels("Environment\\DNC\\DNCLordaeron\\DNCLordaeronTerrain\\DNCLordaeronTerrain.mdl", "Environment\\DNC\\DNCLordaeron\\DNCLordaeronUnit\\DNCLordaeronUnit.mdl")
-    NewSoundEnvironment("Default")
-    SetAmbientDaySound("LordaeronSummerDay")
-    SetAmbientNightSound("LordaeronSummerNight")
-    SetMapMusic("Music", true, 0)
-    CreateAllUnits()
-    InitBlizzard()
-    InitGlobals()
-    InitCustomTriggers()
-    RunInitializationTriggers()
-end
-
-function config()
-    SetMapName("TRIGSTR_001")
-    SetMapDescription("TRIGSTR_003")
-    SetPlayers(1)
-    SetTeams(1)
-    SetGamePlacement(MAP_PLACEMENT_USE_MAP_SETTINGS)
-    DefineStartLocation(0, -192.0, -320.0)
-    InitCustomPlayerSlots()
-    SetPlayerSlotAvailable(Player(0), MAP_CONTROL_USER)
-    InitGenericPlayerSlots()
-end
-
